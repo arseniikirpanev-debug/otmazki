@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALIBI SYSTEM 50 // Аниме-Шпаргалка</title>
+    <style>
+        @import url('https://googleapis.com');
+
+        :root {
+            --bg-dark: #090a0f;
+            --bg-card: rgba(18, 20, 32, 0.88);
+            --neon-pink: #ff2a85;
+            --neon-cyan: #00f0ff;
+            --neon-purple: #9d4edd;
+            --text-main: #ffffff;
+            --text-muted: #9aa5c4;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Montserrat', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 15%, rgba(255, 42, 133, 0.16) 0%, transparent 45%),
+                radial-gradient(circle at 90% 85%, rgba(0, 240, 255, 0.16) 0%, transparent 45%);
+        }
+
+        .cyber-grid {
+            position: fixed;
+            top: 0; left: 0; width: 200%; height: 200%;
+            background-image: 
+                linear-gradient(rgba(0, 240, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 42, 133, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            transform: perspective(500px) rotateX(60deg) translateY(-100px) translateZ(-200px);
+            animation: gridMove 14s linear infinite;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        @keyframes gridMove {
+            0% { transform: perspective(500px) rotateX(60deg) translateY(0) translateZ(-200px); }
+            100% { transform: perspective(500px) rotateX(60deg) translateY(40px) translateZ(-200px); }
+        }
+
+        #particles-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: -1; overflow: hidden;
+        }
+
+        .petal {
+            position: absolute;
+            background: linear-gradient(135deg, #ff85b3, #ff2a85);
+            border-radius: 15px 0 15px 0;
+            box-shadow: 0 0 12px rgba(255, 42, 133, 0.7);
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg) translateX(0); opacity: 0; }
+            15% { opacity: 0.85; }
+            85% { opacity: 0.85; }
+            100% { transform: translateY(110vh) rotate(720deg) translateX(90px); opacity: 0; }
+        }
+
+        .container { max-width: 960px; margin: 0 auto; padding: 25px 18px 80px; }
+
+        header { text-align: center; margin-bottom: 30px; animation: slideDown 0.7s ease; }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .badge {
+            display: inline-block;
+            background: linear-gradient(90deg, var(--neon-pink), var(--neon-purple));
+            padding: 5px 16px; border-radius: 20px;
+            font-size: 0.75rem; font-weight: 800; letter-spacing: 2px;
+            text-transform: uppercase; margin-bottom: 10px;
+            box-shadow: 0 0 18px rgba(255, 42, 133, 0.6);
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1.7rem, 5vw, 2.8rem);
+            font-weight: 900; text-transform: uppercase;
+            background: linear-gradient(90deg, #fff, var(--neon-cyan), var(--neon-pink), #fff);
+            background-size: 200% auto;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: shineText 4s linear infinite;
+        }
+
+        @keyframes shineText { to { background-position: 200% center; } }
+
+        .panic-box {
+            background: var(--bg-card);
+            border: 2px solid var(--neon-pink);
+            border-radius: 16px; padding: 18px; margin-bottom: 22px;
+            text-align: center; backdrop-filter: blur(10px);
+            box-shadow: 0 8px 25px rgba(255, 42, 133, 0.25);
+        }
+
+        .panic-btn {
+            background: linear-gradient(45deg, var(--neon-pink), #ff5e00);
+            border: none; color: #fff; font-family: 'Montserrat', sans-serif;
+            font-weight: 900; font-size: 0.95rem; padding: 13px 26px;
+            border-radius: 12px; cursor: pointer; text-transform: uppercase;
+            letter-spacing: 1px; transition: 0.2s;
+            box-shadow: 0 4px 18px rgba(255, 42, 133, 0.5);
+        }
+
+        .panic-btn:hover { transform: scale(1.04); box-shadow: 0 6px 24px rgba(255, 42, 133, 0.8); }
+        .panic-btn:active { transform: scale(0.96); }
+
+        #random-result {
+            margin-top: 14px; font-size: 1.05rem; font-weight: 700;
+            color: var(--neon-cyan); min-height: 26px;
+        }
+
+        .search-bar {
+            width: 100%; padding: 14px 20px; margin-bottom: 18px;
+            background: var(--bg-card); border: 2px solid rgba(0, 240, 255, 0.3);
+            border-radius: 14px; color: #fff; font-family: 'Montserrat', sans-serif;
+            font-size: 1rem; outline: none; transition: 0.3s;
+        }
+
+        .search-bar:focus { border-color: var(--neon-cyan); box-shadow: 0 0 18px rgba(0, 240, 255, 0.3); }
+
+        .tabs {
+            display: flex; flex-wrap: wrap; gap: 8px;
+            justify-content: center; margin-bottom: 24px;
+        }
+
+        .tab-btn {
+            padding: 10px 16px; background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px; color: var(--text-muted);
+            font-family: 'Montserrat', sans-serif; font-weight: 700;
+            font-size: 0.85rem; cursor: pointer; transition: 0.25s;
+        }
+
+        .tab-btn.active, .tab-btn:hover {
+            border-color: var(--neon-cyan); color: #fff;
+            background: rgba(0, 240, 255, 0.14);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.25);
+        }
+
+        .cards-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-left: 4px solid var(--neon-cyan);
+            border-radius: 12px; padding: 16px 20px;
+            cursor: pointer; position: relative; overflow: hidden;
+            transition: all 0.25s ease;
+        }
+
+        .card:hover {
+            transform: translateX(6px);
+            border-color: var(--neon-pink); border-left-color: var(--neon-pink);
+            box-shadow: 0 6px 20px rgba(255, 42, 133, 0.25);
+        }
+
+        .card-header {
+            display: flex; justify-content: space-between;
+            font-size: 0.72rem; text-transform: uppercase;
+            letter-spacing: 1px; color: var(--neon-cyan);
+            font-weight: 800; margin-bottom: 6px;
+        }
+
+        .card:hover .card-header { color: var(--neon-pink); }
+        .card-text { font-size: 0.98rem; line-height: 1.45; font-weight: 600; }
+
+        .toast {
+            position: fixed; bottom: 22px; right: 22px;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
+            color: #000; font-weight: 900; padding: 12px 22px;
+            border-radius: 12px; box-shadow: 0 8px 25px rgba(0, 240, 255, 0.5);
+            transform: translateY(100px); opacity: 0; transition: 0.35s; z-index: 100;
+        }
+
+        .toast.show { transform: translateY(0); opacity: 1; }
+    </style>
+</head>
+<body>
+    <div class="cyber-grid"></div>
+    <div id="particles-container"></div>
+
+    <div class="container">
+        <header>
+            <div class="badge">⚡ Tactical Alibi Database // 50 Phrases ⚡</div>
+            <h1>Бытовые Отмазки</h1>
+        </header>
+
+        <div class="panic-box">
+            <button class="panic-btn" onclick="generateRandom()">🎲 Режим паники: Случайная фраза</button>
+            <div id="random-result">Нажми кнопку, если спросили резко...</div>
+        </div>
+
+        <input type="text" class="search-bar" id="searchInput" onkeyup="filterCards()" placeholder="🔍 Быстрый поиск по слову (чай, душ, форма, конфорка, автобус)...">
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="filterCategory('all', this)">🔥 Все (50)</button>
+            <button class="tab-btn" onclick="filterCategory('sport', this)">💪 Тренировка (10)</button>
+            <button class="tab-btn" onclick="filterCategory('kitchen', this)">🍳 Кухня и плита (10)</button>
+            <button class="tab-btn" onclick="filterCategory('walk', this)">🚶 Опоздания (10)</button>
+            <button class="tab-btn" onclick="filterCategory('study', this)">📚 Учёба и телефон (10)</button>
+            <button class="tab-btn" onclick="filterCategory('room', this)">🛏️ Комната и сон (10)</button>
+        </div>
+
+        <div class="cards-grid" id="cardsGrid">
+            <div class="card" data-cat="sport" onclick="copyText(this)"><div class="card-header"><span>#01 // Тренировка</span><span>Копировать</span></div><div class="card-text">«Да, я же там в зале сразу в душ сходил, пришёл уже чистый, только форму повесил сушиться».</div></div>
+            <div class="card" data-cat="sport" onclick="copyText(this)"><div class="card-header"><span>#02 // Тренировка</span><span>Копировать</span></div><div class="card-text">«Был, конечно. Я после тренировки там помылся, домой пришёл, вещи развесил и всё — есть даже не хочу».</div></div>
+            <div class="card" data-cat="sport" onclick="copyText(this)"><div class="card-header"><span>#03 // Тренировка</span><span>Копировать</span></div><div class="card-text">«Ага, я ещё раньше вернулся. В зале душ принял, домой пришёл, форму закинул сушиться и только чай попил».</div></div>
+            <div class="card" data-cat="sport" onclick="copyText(this)"><div class="card-header"><span>#04 // Тренировка</span><span>Копировать</span></div><div class="card-text">«Был, просто я там сразу помылся и переоделся, поэтому домой зашёл тихо и даже на кухню не пошёл — аппетита нет».</div></div>
+            <div class="card" data-cat="sport" onclick="copyText(this)"><div class="card-header"><span>#05 // Тренировка</span><span>Копировать</span></div><div class="card-text">«Да, нормально отзанимались. Я там в душ сгонял, пришёл, мокрую форму повесил и всё, отдыхаю».</div></div>
+            <div class="card" data-cat="sport" onclick="copyText(this)"><div class="card-header"><span>#06 // Тренировка</span><span>Копировать</span></div><div class="card-text">«Конечно был, у меня вон форма до сих пор сохнет — я же там в душ сходил, пришёл, развесил вещи и лёг, есть не хотелось».</div></div>
+            <div class="card" data-cat="sport" onclick="copyText(this)"><div class="card-header"><span>#07 // Тренировка</span><span>Копировать</span></div><div class="card-text">«Да был я, я там сразу голову помыл, домой пришёл уже свежий, форму повесил и вырубился».</div></div>
+            <div class="card" data-cat="sport" onclick="copyText(this)"><div class="card-header"><span>#08 // Тренировка</span><span>Копировать</span></div><div class="card-text">«Ага, ходил вчера. Я там в зале помылся, домой пришёл, есть вообще не тянуло — просто чай попил и спать лёг».</div></div>
+            <div class="card" data-cat="sport" onclick="copyText(this)"><div class="card-header"><span>#09 // Тренировка</span><span>Копировать</span></div><div class="card-text">«Был, конечно. Вон форма влажная в ванной висит — я же там душ принял, пришёл и сразу в комнату ушёл».</div></div>
+            <div class="card" data-cat="sport" onclick="copyText(this)"><div class="card-header"><span>#10 // Тренировка</span><span>Копировать</span></div><div class="card-text">«Да, был вчера. Я после зала там помылся, пришёл уже переодетый, форму повесил сушиться и всё, сегодня опять пойду».</div></div>
+
+            <div class="card" data-cat="kitchen" onclick="copyText(this)"><div class="card-header"><span>#11 // Кухня и плита</span><span>Копировать</span></div><div class="card-text">«Мам, кстати, ты на ту конфорку, которая плохо греет, кастрюли лучше не ставь пока — я туда сладкий чай капнул, стекло шершавое стало, как бы не треснуло».</div></div>
+            <div class="card" data-cat="kitchen" onclick="copyText(this)"><div class="card-header"><span>#12 // Кухня и плита</span><span>Копировать</span></div><div class="card-text">«Мам, имей в виду, у меня сегодня сладкий чай попал на ту конфорку, которая плохо греет. Я сразу всё вытер, но там стекло точками пошло, давай её больше не включать».</div></div>
+            <div class="card" data-cat="kitchen" onclick="copyText(this)"><div class="card-header"><span>#13 // Кухня и плита</span><span>Копировать</span></div><div class="card-text">«Я себе чай делал, случайно пролил немного на плиту — сразу вытер насухо, так что всё чисто».</div></div>
+            <div class="card" data-cat="kitchen" onclick="copyText(this)"><div class="card-header"><span>#14 // Кухня и плита</span><span>Копировать</span></div><div class="card-text">«Да я просто суп себе разогревал, он чуть брызнул, я уже всё протёр».</div></div>
+            <div class="card" data-cat="kitchen" onclick="copyText(this)"><div class="card-header"><span>#15 // Кухня и плита</span><span>Копировать</span></div><div class="card-text">«Я кружку мыл, она из мокрых рук выскользнула, но всё целое, только воду вокруг вытер».</div></div>
+            <div class="card" data-cat="kitchen" onclick="copyText(this)"><div class="card-header"><span>#16 // Кухня и плита</span><span>Копировать</span></div><div class="card-text">«Это я пакет с продуктами ставил, а он снизу мокрый оказался — я уже вытер стол».</div></div>
+            <div class="card" data-cat="kitchen" onclick="copyText(this)"><div class="card-header"><span>#17 // Кухня и плита</span><span>Копировать</span></div><div class="card-text">«Холодильник открывал, оттуда баночка чуть наклонилась и капнула, я сразу салфеткой убрал».</div></div>
+            <div class="card" data-cat="kitchen" onclick="copyText(this)"><div class="card-header"><span>#18 // Кухня и плита</span><span>Копировать</span></div><div class="card-text">«Я себе бутерброды делал, крошки сразу смахнул, просто нож ещё не убрал».</div></div>
+            <div class="card" data-cat="kitchen" onclick="copyText(this)"><div class="card-header"><span>#19 // Кухня и плита</span><span>Копировать</span></div><div class="card-text">«Замочил тарелку специально, чтобы засохшее отошло, через пять минут помою».</div></div>
+            <div class="card" data-cat="kitchen" onclick="copyText(this)"><div class="card-header"><span>#20 // Кухня и плита</span><span>Копировать</span></div><div class="card-text">«Я только что чайник ставил и плиту заодно протёр, чтобы чистая была».</div></div>
+                        <div class="card" data-cat="walk" onclick="copyText(this)"><div class="card-header"><span>#21 // Опоздания</span><span>Копировать</span></div><div class="card-text">«Транспорт вообще не ходил, стоял на остановке минут двадцать, ещё и телефон почти сел».</div></div>
+            <div class="card" data-cat="walk" onclick="copyText(this)"><div class="card-header"><span>#22 // Опоздания</span><span>Копировать</span></div><div class="card-text">«Мы с ребятами разговорились у подъезда, время вообще незаметно пролетело».</div></div>
+            <div class="card" data-cat="walk" onclick="copyText(this)"><div class="card-header"><span>#23 // Опоздания</span><span>Копировать</span></div><div class="card-text">«Заходил в магазин по дороге, там на кассе очередь огромная была, завис на пятнадцать минут».</div></div>
+            <div class="card" data-cat="walk" onclick="copyText(this)"><div class="card-header"><span>#24 // Опоздания</span><span>Копировать</span></div><div class="card-text">«Решил пешком пройтись, чтобы проветриться после дня, вот и шёл дольше обычного».</div></div>
+            <div class="card" data-cat="walk" onclick="copyText(this)"><div class="card-header"><span>#25 // Опоздания</span><span>Копировать</span></div><div class="card-text">«Одноклассника/знакомого встретил по пути, давно не виделись, постояли поболтали».</div></div>
+            <div class="card" data-cat="walk" onclick="copyText(this)"><div class="card-header"><span>#26 // Опоздания</span><span>Копировать</span></div><div class="card-text">«Наушники в ушах были, задумался и свою остановку проехал, пришлось возвращаться».</div></div>
+            <div class="card" data-cat="walk" onclick="copyText(this)"><div class="card-header"><span>#27 // Опоздания</span><span>Копировать</span></div><div class="card-text">«Помогал другу вещи донести до дома, ему одному неудобно было».</div></div>
+            <div class="card" data-cat="walk" onclick="copyText(this)"><div class="card-header"><span>#28 // Опоздания</span><span>Копировать</span></div><div class="card-text">«На светофорах сегодня как назло везде на красный попадал, поэтому задержался».</div></div>
+            <div class="card" data-cat="walk" onclick="copyText(this)"><div class="card-header"><span>#29 // Опоздания</span><span>Копировать</span></div><div class="card-text">«Заходил в аптеку/пункт выдачи по пути, там программа зависла, долго ждали».</div></div>
+            <div class="card" data-cat="walk" onclick="copyText(this)"><div class="card-header"><span>#30 // Опоздания</span><span>Копировать</span></div><div class="card-text">«Я же предупреждал, что сегодня чуть позже освобожусь, просто без шума зашёл».</div></div>
+
+            <div class="card" data-cat="study" onclick="copyText(this)"><div class="card-header"><span>#31 // Учёба и телефон</span><span>Копировать</span></div><div class="card-text">«Я не в телефоне залипаю, я у одноклассников уточняю, что нам точно задали, а то в дневнике непонятно».</div></div>
+            <div class="card" data-cat="study" onclick="copyText(this)"><div class="card-header"><span>#32 // Учёба и телефон</span><span>Копировать</span></div><div class="card-text">«У нас сегодня этот урок сократили / учителя не было, поэтому так быстро всё сделал».</div></div>
+            <div class="card" data-cat="study" onclick="copyText(this)"><div class="card-header"><span>#33 // Учёба и телефон</span><span>Копировать</span></div><div class="card-text">«Я сложную тему по видеоразбору смотрел, так быстрее доходит, чем по учебнику».</div></div>
+            <div class="card" data-cat="study" onclick="copyText(this)"><div class="card-header"><span>#34 // Учёба и телефон</span><span>Копировать</span></div><div class="card-text">«У нас половина класса это не сдала, учитель перенёс проверку на следующий раз».</div></div>
+            <div class="card" data-cat="study" onclick="copyText(this)"><div class="card-header"><span>#35 // Учёба и телефон</span><span>Копировать</span></div><div class="card-text">«Я черновик уже сделал, осталось только начисто переписать, это на десять минут».</div></div>
+            <div class="card" data-cat="study" onclick="copyText(this)"><div class="card-header"><span>#36 // Учёба и телефон</span><span>Копировать</span></div><div class="card-text">«Мне по учёбе скинули файл, я его с телефона открывал, поэтому сидел в экране».</div></div>
+            <div class="card" data-cat="study" onclick="copyText(this)"><div class="card-header"><span>#37 // Учёба и телефон</span><span>Копировать</span></div><div class="card-text">«Я сегодня на уроке хорошо поработал, меня уже спросили, так что на завтра можно выдохнуть».</div></div>
+            <div class="card" data-cat="study" onclick="copyText(this)"><div class="card-header"><span>#38 // Учёба и телефон</span><span>Копировать</span></div><div class="card-text">«У нас контрольная была, после неё домашку на сегодня почти не задавали».</div></div>
+            <div class="card" data-cat="study" onclick="copyText(this)"><div class="card-header"><span>#39 // Учёба и телефон</span><span>Копировать</span></div><div class="card-text">«Я специально перерыв на пятнадцать минут сделал, чтобы голова отдохнула, сейчас продолжу».</div></div>
+            <div class="card" data-cat="study" onclick="copyText(this)"><div class="card-header"><span>#40 // Учёба и телефон</span><span>Копировать</span></div><div class="card-text">«Да я всё уже собрал на завтра, рюкзак у двери стоит».</div></div>
+
+            <div class="card" data-cat="room" onclick="copyText(this)"><div class="card-header"><span>#41 // Комната и сон</span><span>Копировать</span></div><div class="card-text">«Это не бардак, я просто вещи перебираю, чтобы убрать ненужное в шкаф — через полчаса всё разложу».</div></div>
+            <div class="card" data-cat="room" onclick="copyText(this)"><div class="card-header"><span>#42 // Комната и сон</span><span>Копировать</span></div><div class="card-text">«Я специально форточку открыл проветрить, а плед/одежду кинул на стул, чтобы не мялись».</div></div>
+            <div class="card" data-cat="room" onclick="copyText(this)"><div class="card-header"><span>#43 // Комната и сон</span><span>Копировать</span></div><div class="card-text">«Будильник прозвенел, я его выключил и решил ещё пять минут полежать, чтобы голова не кружилась».</div></div>
+            <div class="card" data-cat="room" onclick="copyText(this)"><div class="card-header"><span>#44 // Комната и сон</span><span>Копировать</span></div><div class="card-text">«Я ночью плохо спал, долго уснуть не мог, поэтому утром так тяжело вставал».</div></div>
+            <div class="card" data-cat="room" onclick="copyText(this)"><div class="card-header"><span>#45 // Комната и сон</span><span>Копировать</span></div><div class="card-text">«Я уже проснулся, просто лежу с закрытыми глазами, чтобы резко не вскакивать».</div></div>
+            <div class="card" data-cat="room" onclick="copyText(this)"><div class="card-header"><span>#46 // Комната и сон</span><span>Копировать</span></div><div class="card-text">«Провод от зарядки упал за кровать, я его доставал, поэтому тут немного сдвинулось».</div></div>
+            <div class="card" data-cat="room" onclick="copyText(this)"><div class="card-header"><span>#47 // Комната и сон</span><span>Копировать</span></div><div class="card-text">«Я вчера так вымотался, что даже свет/телевизор не выключил и сразу вырубился».</div></div>
+            <div class="card" data-cat="room" onclick="copyText(this)"><div class="card-header"><span>#48 // Комната и сон</span><span>Копировать</span></div><div class="card-text">«Я сейчас как раз собирался пыль протереть и вещи сложить, ты прямо вовремя зашла».</div></div>
+            <div class="card" data-cat="room" onclick="copyText(this)"><div class="card-header"><span>#49 // Комната и сон</span><span>Копировать</span></div><div class="card-text">«Это я на завтра одежду заранее приготовил, чтобы утром в темноте не искать».</div></div>
+            <div class="card" data-cat="room" onclick="copyText(this)"><div class="card-header"><span>#50 // Комната и сон</span><span>Копировать</span></div><div class="card-text">«Да я не сплю уже, просто тихо лежу, никому мешать не хотел».</div></div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">Скопировано в буфер! 📋</div>
+        <script>
+        const particlesContainer = document.getElementById('particles-container');
+        const petalCount = 28;
+
+        for (let i = 0; i < petalCount; i++) {
+            const petal = document.createElement('div');
+            petal.classList.add('petal');
+            const size = Math.random() * 10 + 6;
+            petal.style.width = `${size}px`;
+            petal.style.height = `${size * 0.7}px`;
+            petal.style.left = `${Math.random() * 100}vw`;
+            petal.style.animationDuration = `${Math.random() * 6 + 5}s`;
+            petal.style.animationDelay = `${Math.random() * 5}s`;
+            particlesContainer.appendChild(petal);
+        }
+
+        let currentCategory = 'all';
+
+        function filterCategory(cat, btnElement) {
+            currentCategory = cat;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+            filterCards();
+        }
+
+        function filterCards() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.card');
+
+            cards.forEach(card => {
+                const cat = card.getAttribute('data-cat');
+                const text = card.querySelector('.card-text').textContent.toLowerCase();
+                const matchesCat = (currentCategory === 'all' || cat === currentCategory);
+                const matchesSearch = text.includes(query);
+
+                card.style.display = (matchesCat && matchesSearch) ? 'block' : 'none';
+            });
+        }
+
+        function generateRandom() {
+            const cards = Array.from(document.querySelectorAll('.card')).filter(c => c.style.display !== 'none');
+            const pool = cards.length > 0 ? cards : Array.from(document.querySelectorAll('.card'));
+            const randomCard = pool[Math.floor(Math.random() * pool.length)];
+            const resultEl = document.getElementById('random-result');
+
+            resultEl.style.opacity = '0';
+            setTimeout(() => {
+                resultEl.textContent = randomCard.querySelector('.card-text').textContent;
+                resultEl.style.opacity = '1';
+            }, 150);
+        }
+
+        function copyText(cardElement) {
+            const text = cardElement.querySelector('.card-text').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const toast = document.getElementById('toast');
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 2200);
+            });
+        }
+    </script>
+</body>
+</html>
